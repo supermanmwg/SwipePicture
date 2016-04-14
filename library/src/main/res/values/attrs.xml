@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SwipePicture">
+        <attr name="stack_size" format="integer"/>
+        <attr name="animation_duration" format="integer"/>
+        <attr name="pic_rotation" format="float"/>
+        <attr name="swipe_rotation" format="float" />
+        <attr name="scale_factor" format="float"/>
+        <attr name="pic_interval" format="dimension" />
+    </declare-styleable>
+</resources>

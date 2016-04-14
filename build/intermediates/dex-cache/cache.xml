@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/weiguangmeng/gitStudy/SwipePicture/app/build/intermediates/exploded-aar/SwipePicture/library/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="e9a70f0262b61cb914c406262aab80a8a7305836">
+        <dex dex="/Users/weiguangmeng/gitStudy/SwipePicture/app/build/intermediates/pre-dexed/debug/SwipePicture-library-unspecified_20495893b3a9e70836403f7ffc8537a5e301ebeb.jar" />
+    </item>
+
+</items>
