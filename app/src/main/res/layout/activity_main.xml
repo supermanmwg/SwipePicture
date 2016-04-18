@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:padding="100dp"
+    android:clipToPadding="false"
+    android:clipChildren="false"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.swipepicture.MainActivity">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/image"
-        android:background="#456"
-        android:layout_width="150dp"
-        android:layout_height="150dp" />
-</LinearLayout>
+
+    <com.library.SwipePicture
+        android:id="@+id/swipeStack"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/padding_swipepicture"
+        app:pic_rotation="10"
+        app:stack_size="3"/>
+
+
+</RelativeLayout>

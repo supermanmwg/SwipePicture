@@ -3,8 +3,10 @@ package com.library;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
+import android.graphics.Canvas;
 import android.text.Layout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -15,6 +17,7 @@ import java.util.Random;
  * Created by weiguangmeng on 16/4/14.
  */
 public class SwipePicture extends ViewGroup {
+    private static final String TAG = "SwipePicture";
     private static final int DEFAULT_ANIMATION_DURATION = 500;
     private static final int DEFAULT_STACK_SIZE = 3;
     private static final int DEFAULT_SCALE_FACTOR = 1;
@@ -37,6 +40,9 @@ public class SwipePicture extends ViewGroup {
 
     private boolean isNewView;
     private boolean isRefreshSwipe = true;
+    private View mTopView;
+
+    private SwiperHelper mSwiperHelper;
 
     public SwipePicture(Context context) {
         this(context, null);
@@ -49,6 +55,7 @@ public class SwipePicture extends ViewGroup {
     public SwipePicture(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         readAttributes(attrs);
+        init();
     }
 
     private void readAttributes(AttributeSet set) {
@@ -66,6 +73,8 @@ public class SwipePicture extends ViewGroup {
     }
 
     private void init() {
+        setClipChildren(false);
+        setClipToPadding(false);
         mRandom = new Random();
         mDataSetObserver = new DataSetObserver() {
             @Override
@@ -75,6 +84,7 @@ public class SwipePicture extends ViewGroup {
                 requestLayout();
             }
         };
+        mSwiperHelper = new SwiperHelper(this);
     }
 
     @Override
@@ -121,22 +131,26 @@ public class SwipePicture extends ViewGroup {
             int measureSpecHeight = MeasureSpec.makeMeasureSpec(height, measureHeight);
             childView.measure(measureSpecWidth, measureSpecHeight);
 
+            addViewInLayout(childView, 0, lp, true);
+
             mCurrentIndex++;
         }
     }
 
     private void resetItems() {
         int topViewIndex = getChildCount() - 1;
-        for(int i = 0; i < getChildCount(); i++) {
+        for(int i = getChildCount() - 1; i >= 0 ; i--) {
             View childView = getChildAt(i);
 
             int topViewInstance = (getChildCount() - i) * mPicInterval;
-            int viewPosX = (getWidth() - childView.getWidth()) / 2;
+            int viewPosX = (getWidth() - childView.getMeasuredWidth()) / 2;
             int viewPosY = topViewInstance + getPaddingTop();
+            Log.d(TAG, "Pos x is " + viewPosX + ", width is " + getWidth() + ", childWidth is "  + childView.getWidth());
 
-            childView.layout(viewPosX, viewPosY, viewPosX + childView.getMeasuredWidth(), viewPosY + childView.getMeasuredHeight());
+            childView.layout(viewPosX, getPaddingTop(), viewPosX + childView.getMeasuredWidth(), getPaddingTop() + childView.getMeasuredHeight());
             if(i == topViewIndex) {
-
+                mTopView = childView;
+                mSwiperHelper.registerObserverView(mTopView, viewPosX, viewPosY);
             }
 
             isNewView = (boolean) childView.getTag(R.id.new_view);
@@ -155,6 +169,7 @@ public class SwipePicture extends ViewGroup {
                         .scaleX(mScaleFactor)
                         .scaleY(mScaleFactor)
                         .setDuration(mAnimationDuration);
+
             } else {
                 childView.setTag(R.id.new_view, false);
                 childView.setY(viewPosY);
@@ -175,5 +190,17 @@ public class SwipePicture extends ViewGroup {
 
     public void setAdapter(Adapter adapter) {
         this.adapter = adapter;
+    }
+
+    public void removeTop() {
+       removeView(mTopView);
+    }
+
+    @Override
+     public void onDraw(Canvas canvas) {
+        for(int i = getChildCount() - 1; i >= 0 ; i--) {
+            View childView = getChildAt(i);
+            Log.d(TAG, "draw childView width is " + childView.getWidth());
+        }
     }
 }
